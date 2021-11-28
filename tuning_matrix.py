@@ -21,7 +21,7 @@ class TuningMatrix:
         except:
             raise config.error("cannot locate or parse bed_dim. make sure is present and formatted correctly")
         self.last_position = [0., 0., 0., 0.]
-        self.last_x = self.last_y = self.x_min = self.y_min = self.x_max =self.y_max = self.x_del = self.y_del = self.min=self.max=self.delta= 0.
+        self.last_x = self.last_y = self.last_z =self.x_min = self.y_min = self.x_max =self.y_max = self.x_del = self.y_del = self.min=self.max=self.delta= 0.
         self.last_command_value = []
         self.command_fmt = self.command_fmt_x = self.command_fmt_y =  ""
         self.gcode_move = self.printer.load_object(config, "gcode_move")
@@ -106,7 +106,7 @@ class TuningMatrix:
         # Enable test mode
         nt = self.gcode_move.set_move_transform(self, force=True)
         self.normal_transform = nt
-        self.last_x = self.last_y = -99999999.9
+        self.last_x = self.last_y = self.last_z  = -99999999.9
         self.last_command_value = None
         self.get_position()
         gcmd.respond_info(
