@@ -19,7 +19,7 @@ two mode of use:
 
 CMD - only one command to be changed for both x and y. The value will be changed left to right, bottom to top in a zig zag pattern. Value starts at MIN and will be changed each cell either by the user provided DEL value, or if the user provides MAX, will calculate the appropriate incriment based on total number of cells
 
-TUNING_MATRIX ROWS=<number of rows> COLS=<number of collumns>  CMD=<command to be changed> PARAM=<parameter to be changed for command> MIN=<min value for parameter> MAX=<max value for parameter> DEL=<ammount to change parameter for each cell>
+TUNING_MATRIX ROWS=[number of rows] COLS=[number of collumns]  CMD=[command to be changed] PARAM=[parameter to be changed for command] MIN=[min value for parameter] MAX=[max value for parameter] DEL=[ammount to change parameter for each cell]
 
   
   
