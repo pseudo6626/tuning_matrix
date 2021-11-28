@@ -25,5 +25,5 @@ TUNING_MATRIX ROWS=[number of rows] COLS=[number of collumns]  CMD=[command to b
   
 X_CMD and Y_CMD - two different commands will be used for both x and y. in this case, parameters, min, and max or del values must be given for each x and y.
 
-TUNING_MATRIX ROWS=<number of rows> COLS=<number of collumns>  X_CMD=<klipper command for x direction> X_PARAM=<parameter to be changed for x command> X_MIN=<min value for x param> X_MAX=<max value for x param> DEL_X=<ammount to change x param for each cell> Y_CMD=<klipper command for y direction> Y_PARAM=<parameter to be changed for y command> Y_MIN=<min value for y param> Y_MAX=<max value for y param> DEL_Y=<ammount to change y param for each cell>
+TUNING_MATRIX ROWS=[number of rows] COLS=[number of collumns]  X_CMD=[klipper command for x direction] X_PARAM=[parameter to be changed for x command] X_MIN=[min value for x param] X_MAX=[max value for x param] DEL_X=[ammount to change x param for each cell] Y_CMD=[klipper command for y direction] Y_PARAM=[parameter to be changed for y command] Y_MIN=[min value for y param] Y_MAX=[max value for y param] DEL_Y=[ammount to change y param for each cell]
 
