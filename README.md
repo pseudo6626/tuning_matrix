@@ -9,6 +9,7 @@ This not only allows for shorter (and thus faster) calibration prints, but also 
 to use tuning_matrix, first, add the following to your printer.cfg file:
 
 [tuning_matrix]
+
 bed_dim=[xmin,xmax,ymin,ymax] #Where xmin,xmax,ymin,ymax are the min max coordinates of your bed in mm
 
 Next, copy the tuning_matrix.py file in this depot into your pi/home/klipper/klippy/extras  folder on your klipper controling raspberry pi. And that is it!
