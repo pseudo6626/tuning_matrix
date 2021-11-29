@@ -22,7 +22,7 @@ class TuningMatrix:
             raise config.error("cannot locate or parse bed_dim. make sure is present and formatted correctly")
         self.last_position = [0., 0., 0., 0.]
         self.last_x = self.last_y = self.last_z =self.x_min = self.y_min = self.x_max =self.y_max = self.x_del = self.y_del = self.min=self.max=self.delta= 0.
-        self.last_command_value = []
+        self.last_command_values = []
         self.command_fmt = self.command_fmt_x = self.command_fmt_y =  ""
         self.gcode_move = self.printer.load_object(config, "gcode_move")
         # Register command
@@ -42,9 +42,9 @@ class TuningMatrix:
         self.cell_height=int(self.yrange/self.rows)
         self.cell_walls=[]
         self.cell_topbot=[]
-        for i in range(self.dims[0],self.dims[1],self.cell_width):
+        for i in range(self.dims[0],self.dims[1]+self.cell_width,self.cell_width):
             self.cell_walls.append(i)
-        for j in range(self.dims[2],self.dims[3],self.cell_height):
+        for j in range(self.dims[2],self.dims[3]+self.cell_height,self.cell_height):
             self.cell_topbot.append(j)
         #get commands, parameters, mins maxes and deltas
         message_parts = []
@@ -115,18 +115,20 @@ class TuningMatrix:
         pos = self.normal_transform.get_position()
         self.last_position = list(pos)
         return pos
-    def locate(checks,val):
+    def locate(self,checks,val):
+        logging.info(checks)
+        logging.info(val)
         for i in checks:
             if val <= i:
-                return checks.index(round((i+1)/2))
+                return round((checks.index(i)+1)/2)
         return "e"
     def calc_value(self, pos):
         # check if in CMD or X,Y mode
         new_vals=[]
-        x_count=self.locate(self.cell_walls,pos.x)
+        x_count=self.locate(self.cell_walls,pos[0])
         if x_count=="e":
             raise self.gcmd.error("Error: position not located within grid")
-        y_count=self.locate(self.cell_topbot,pos.y)
+        y_count=self.locate(self.cell_topbot,pos[1])
         if y_count=="e":
             raise self.gcmd.error("Error: position not located within grid")       
         if self.command:
@@ -145,10 +147,12 @@ class TuningMatrix:
         else:
             # Process update
             gcode_pos = self.gcode_move.get_status()['gcode_position']
-            newvals = self.calc_value(self,gcode_pos)
+            parsed_pos=[gcode_pos.x,gcode_pos.y,gcode_pos.z]
+            logging.info(parsed_pos[0])
+            newvals = self.calc_value(parsed_pos)
             if newvals != self.last_command_values:
                 if len(newvals) == 1:
-                    self.gcode.run_script_from_command(self.command_fmt % (newvals,))
+                    self.gcode.run_script_from_command(self.command_fmt % (newvals[0],))
                 elif len(self.last_command_values)>1:
                     if self.last_command_values[0] != newvals[0]:
                         self.gcode.run_script_from_command(self.command_fmt_x % (newvals[0],))
