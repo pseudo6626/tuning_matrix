@@ -65,7 +65,7 @@ class TuningMatrix:
             if self.max != 0. and self.delta != 0.:
                 raise gcmd.error("Cannot specify both MAX and DEL when using CMD, pick only one")
             if self.max !=0.0:
-                self.delta=(self.max-self.min)/self.cell_count
+                self.delta=(self.max-self.min)/max(self.cell_count-1,1)
             message_parts.append("delta=%.6f" % (self.delta,))
             if self.gcode.is_traditional_gcode(self.command):
                 self.command_fmt = "%s %s%%.9f" % (self.command, parameter)
@@ -86,7 +86,7 @@ class TuningMatrix:
             else:
                 self.command_fmt_x = "%s %s=%%.9f" % (self.x_cmd, x_param)
             if self.x_max:
-                self.x_del=(self.x_max - self.x_min)/self.cols
+                self.x_del=(self.x_max - self.x_min)/max(self.cols-1,1)
             message_parts.append("x_delta=%.6f" % (self.x_del,))
             y_param=gcmd.get('Y_PARAM',None)
             self.y_min=gcmd.get_float('Y_MIN',0.)
@@ -102,7 +102,7 @@ class TuningMatrix:
             else:
                 self.command_fmt_y = "%s %s=%%.9f" % (self.y_cmd, y_param)
             if self.y_max:
-                self.y_del=(self.y_max - self.y_min)/self.rows
+                self.y_del=(self.y_max - self.y_min)/max(self.rows-1,1)
             message_parts.append("y_delta=%.6f" % (self.y_del,))
         else:
              raise gcmd.error("Atleast one of CMD, X_CMD, or Y_CMD must be declaired")
@@ -135,11 +135,11 @@ class TuningMatrix:
         if y_count=="e":
             raise self.gcmd.error("Error: position not located within grid")       
         if self.command:
-            new_vals.append(self.min + self.delta*(self.cols*max(y_count-1,0)+x_count))
+            new_vals.append(self.min + self.delta*(self.cols*max(y_count-2,0)+max(x_count-1,0)))
         elif self.y_cmd:
             if self.x_cmd:
-                new_vals.append(self.x_min + self.x_del*x_count)
-            new_vals.append(self.y_min + self.y_del*y_count)
+                new_vals.append(self.x_min + self.x_del*max(x_count-1,0))
+            new_vals.append(self.y_min + self.y_del*max(y_count-1,0))
         return new_vals
     def move(self, newpos, speed):
         normal_transform = self.normal_transform
