@@ -119,9 +119,12 @@ class TuningMatrix:
         self.last_position = list(pos)
         return pos
     def locate(self,checks,val):
+        index=0
         for i in checks:
-            if val <= i:
-                return round((checks.index(i)+1.1)/2)
+            if i < val:
+                index+=1
+        if index !=0:
+            return index
         return "e"
     def calc_value(self, pos):
         # check if in CMD or X,Y mode
