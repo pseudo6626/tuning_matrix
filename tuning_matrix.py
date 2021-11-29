@@ -119,24 +119,26 @@ class TuningMatrix:
         self.last_position = list(pos)
         return pos
     def locate(self,checks,val):
-        index=0
+        index=1
+        if val == 0:
+            return 1
         for i in checks:
             if i < val:
                 index+=1
-        if index !=0:
+        if index > 0:
             return index
         return "e"
     def calc_value(self, pos):
         # check if in CMD or X,Y mode
         new_vals=[]
         x_count=self.locate(self.cell_walls,pos[0])
-        logging.info("x_count: %d" % (x_count,))
         if x_count=="e":
             raise self.gcmd.error("Error: position not located within grid")
+        logging.info("x_count: %d" % (x_count,))
         y_count=self.locate(self.cell_topbot,pos[1])
-        logging.info("y_count: %d" % (y_count,))
         if y_count=="e":
-            raise self.gcmd.error("Error: position not located within grid")       
+            raise self.gcmd.error("Error: position not located within grid")
+        logging.info("y_count: %d" % (y_count,))       
         if self.command:
             new_vals.append(self.min + self.delta*(self.cols*max(y_count-2,0)+max(x_count-1,0)))
         elif self.y_cmd:
