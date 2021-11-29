@@ -4,7 +4,7 @@
 #
 # This file may be distributed under the terms of the GNU GPLv3 license.
 
-# command TUNING_MATRIX ROWS=<> COLS=<> X_CMD=<> X_PARAM=<> X_MIN=<> X_MAX=<> DEL_X=<> Y_CMD=<> Y_PARAM=<>  Y_MIN=<> Y_MAX=<> DEL_Y=<> CMD=<> PARAM=<> MIN=<> MAX=<> DEL=<>
+# command TUNING_MATRIX ROWS=<> COLS=<> X_CMD=<> X_PARAM=<> X_MIN=<> X_MAX=<> X_DEL=<> Y_CMD=<> Y_PARAM=<>  Y_MIN=<> Y_MAX=<> Y_DEL=<> CMD=<> PARAM=<> MIN=<> MAX=<> DEL=<>
 # needs header [tuning_matrix] in cfg with parameter: bed_dim=[xmin,xmax,ymin,ymax]
 import math, logging, ast
 
