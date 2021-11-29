@@ -64,6 +64,9 @@ class TuningMatrix:
                 raise gcmd.error("PARAM must be defined if using CMD")
             if self.max != 0. and self.delta != 0.:
                 raise gcmd.error("Cannot specify both MAX and DEL when using CMD, pick only one")
+            if self.max !=0.0:
+                self.delta=(self.max-self.min)/self.cell_count
+            message_parts.append("delta=%.6f" % (self.delta,))
             if self.gcode.is_traditional_gcode(self.command):
                 self.command_fmt = "%s %s%%.9f" % (self.command, parameter)
             else:
@@ -116,19 +119,19 @@ class TuningMatrix:
         self.last_position = list(pos)
         return pos
     def locate(self,checks,val):
-        logging.info(checks)
-        logging.info(val)
         for i in checks:
             if val <= i:
-                return round((checks.index(i)+1)/2)
+                return round((checks.index(i)+1.1)/2)
         return "e"
     def calc_value(self, pos):
         # check if in CMD or X,Y mode
         new_vals=[]
         x_count=self.locate(self.cell_walls,pos[0])
+        logging.info("x_count: %d" % (x_count,))
         if x_count=="e":
             raise self.gcmd.error("Error: position not located within grid")
         y_count=self.locate(self.cell_topbot,pos[1])
+        logging.info("y_count: %d" % (y_count,))
         if y_count=="e":
             raise self.gcmd.error("Error: position not located within grid")       
         if self.command:
@@ -148,7 +151,6 @@ class TuningMatrix:
             # Process update
             gcode_pos = self.gcode_move.get_status()['gcode_position']
             parsed_pos=[gcode_pos.x,gcode_pos.y,gcode_pos.z]
-            logging.info(parsed_pos[0])
             newvals = self.calc_value(parsed_pos)
             if newvals != self.last_command_values:
                 if len(newvals) == 1:
